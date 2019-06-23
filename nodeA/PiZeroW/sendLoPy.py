@@ -20,7 +20,7 @@ def sendFileLoPy (fileName): #function to transmit any file through serial
 
     global bufferSize
 
-    startingTime = time. time() #gets initial time
+    startingTime = time.time() #gets initial time
 
     print('Sending file name...')
     file = fileName.split('/')
@@ -48,9 +48,8 @@ def sendFileLoPy (fileName): #function to transmit any file through serial
         print('Transmission time for the ' + fileName + ' was ' + str(time.time() - startingTime) + 's')
 
 
-def sendLoPy (toSend): #function to transmit of data to LoPy
+def sendLoPy (toSend): #function to transmit data to LoPy
 
-    global s
     toSend = str("{0:0=3d}".format(len(toSend)+3)) + toSend #adds in the beginning the length of the buffer
 
     with serial.Serial( port, 115200, timeout = 10) as ser:
@@ -58,13 +57,13 @@ def sendLoPy (toSend): #function to transmit of data to LoPy
             ser.write(bytes(toSend))# sends the buffer coded in uft-8
 
             timeOut = time.time() + 0.02
-            while time.time() < timeOut: #waits for 2 seconds for message back from LoPy
+            while time.time() < timeOut: #waits for 0.02 seconds for message back from LoPy
                 receivedMessage = ser.read(ser.in_waiting).decode('utf-8')
                 
-                if 'received' in receivedMessage: #if it receives 'received' breaks earlier
+                if 'received' in receivedMessage: #if receives 'received' breaks earlier
                     break
 
-            if 'received' in receivedMessage: # is is received, sends a new buffer
+            if 'received' in receivedMessage: # if is received, sends a new buffer
                 print('\n***received!***')
                 receivedMessage = ''
                 break
