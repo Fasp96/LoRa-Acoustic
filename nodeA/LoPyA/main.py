@@ -10,9 +10,6 @@ pycom.heartbeat(False)
 pycom.rgbled(0xFFFFFF)
 
 
-dirToBeSend = 'toSend/'
-
-
 def UARTtransmission():
 
     uart1 = UART(0, 115200, bits = 8, parity = None, stop = 1)
@@ -66,14 +63,17 @@ s.setblocking(False)
 
 def sendNodeSender(): #main function for the transission between LoPy throught LoRa
     while True:
-        global dirToBeSend
 
-        filesName = os.listdir(dirToBeSend[:-1])
+        filesName = []
+
+        for file in os.listdir():
+            if file.endswith(".txt"):
+                filesName.append(file)
 
         if(len(filesName) != 0):
             for i in filesName:
                 sendFileLoRa(i)
-                os.remove(dirToBeSend + i)
+                os.remove(i)
 
 
 def sendFileLoRa (fileName): #function to transmit any file through LoRa
@@ -138,5 +138,6 @@ _thread.start_new_thread(UARTtransmission, ())
 _thread.start_new_thread(sendNodeSender, ())
 '''
 
-UARTtransmission()
+#UARTtransmission()
+sendNodeSender()
 #sendFileLoRa('GOPR2049.txt')
