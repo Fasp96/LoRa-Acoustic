@@ -12,15 +12,21 @@ compressDir = 'Compressed/Sounds/' # directory to folder to save compressed soun
 base64Dir = 'Base64/Sounds/' #directory to save base64 files
 
 def soundCompiler():
-        fileRec = recordSound(recDir, secRec)
-        print('**Sound recorded: ' + fileRec)
-        fileCompress = compressFile(recDir + fileRec, compressDir, doneDir)
-        print('**Sound compressed: ' + fileCompress)
-        base64File = convBase64(compressDir + fileCompress, base64Dir)
-        print('**Sound Converted to Base64: ' + base64File)
 
-sC = multiprocessing.Process(target = soundCompiler)
-Sc = multiprocessing.Process(target = sendSerial, args =(base64Dir,))
+	        fileRec = recordSound(recDir, secRec)
+        	print('**Sound recorded: ' + fileRec)
+		fileCompress = compressFile(recDir + fileRec, compressDir, doneDir)
+        	print('**Sound compressed: ' + fileCompress)
+        	base64File = convBase64(compressDir + fileCompress, base64Dir)
+        	print('**Sound Converted to Base64: ' + base64File)
+
+if __name__ == '__main__':
+	soundCompiler()
+	sendSerial(base64Dir)
+	time.sleep(60*60)
+
+#sC = multiprocessing.Process(target = soundCompiler)
+#Sc = multiprocessing.Process(target = sendSerial, args =(base64Dir,))
 
 #sC.start()
-Sc.start()
+#Sc.start()

@@ -18,7 +18,6 @@ def receiveLoRa():
 
     data1 = ''
     fileName = ''
-    send = ''
     SLEEP = 0
 
     while True:
@@ -29,12 +28,7 @@ def receiveLoRa():
             data = received.decode('utf-8') # recieves data and decodes from utf-8
             if data != data1 and str(data[:3]) == str("{0:0=3d}".format(len(data))):
 
-                if data[3:] == 'temp' : #send temperature
-                    while send == '' or send == None:
-                        send = ds18B20_temp.read_temp_async()
-                        ds18B20_temp.start_conversion()
-
-                elif data[3:13] == 'filename: ': #new fileName
+                if data[3:13] == 'filename: ': #new fileName
                     fileName = data[13:]
                     fileWrite = open (fileName, 'w').close() #clear ever$
 
@@ -50,16 +44,12 @@ def receiveLoRa():
                         data1 = data
                         print (data1)
 
-                        if send == '' :
-                            s.send(bytes('received', 'utf-8')) #sends back a message to notify that was recieved
-                            print('recieved')
-                        else:
-                            s.send(bytes('Temp = ' + str(send), 'utf-8'))
-                            send = ''
-                            #time.sleep (SLEEP)
-                    else:
-                        pycom.rgbled(0xFFFFFF) # set LED to WHITE
-                        time.sleep(SLEEP)
+
+                s.send(bytes('received', 'utf-8')) #sends back a message to notify that was recieved
+                print('recieved')
+        else:
+            pycom.rgbled(0xFFFFFF) # set LED to WHITE
+            time.sleep(SLEEP)
 
 ###################################################################################
 
@@ -131,4 +121,4 @@ def sendRPi(toSend): #function to transmit data to RPi
             print('\nsend again...')
 
 #receiveLoRa()
-UARTtransmission()
+#UARTtransmission()
